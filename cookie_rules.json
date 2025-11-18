@@ -1,0 +1,86 @@
+{
+    "rules": [
+      {
+        "pattern": "visid_incap_.*|nlbi_.*|incap_ses_.*",
+        "category": "necessary",
+        "iab_purposes": [1],
+        "description": "Incapsula security cookies (load balancing, bot protection)."
+      },
+      {
+        "pattern": "__cf_bm|_cfuvid",
+        "category": "necessary",
+        "iab_purposes": [1],
+        "description": "Cloudflare bot management cookies."
+      },
+      {
+        "pattern": "dsg-consent",
+        "category": "functional",
+        "iab_purposes": [1],
+        "description": "Stores user consent preferences."
+      },
+      {
+        "pattern": "_gcl_au",
+        "category": "marketing",
+        "iab_purposes": [3, 4],
+        "iab_id": 755,
+        "description": "Google Ads conversion tracking."
+      },
+      {
+        "pattern": "_ga(_.*)?|_gid|_gat.*",
+        "category": "analytics",
+        "iab_purposes": [7, 10],
+        "iab_id": 755,
+        "description": "Google Analytics visitor tracking."
+      },
+      {
+        "pattern": "ar_debug",
+        "category": "analytics",
+        "iab_purposes": [7],
+        "description": "Google Analytics debug cookie."
+      },
+      {
+        "pattern": "CLID|SM|MUID",
+        "category": "analytics",
+        "iab_purposes": [7, 10],
+        "description": "Microsoft Clarity session/analytics tracking."
+      },
+      {
+        "pattern": "test_cookie|IDE",
+        "category": "marketing",
+        "iab_purposes": [3, 4],
+        "description": "Google DoubleClick advertising cookies."
+      },
+      {
+        "pattern": "li_sugr|bcookie|lidc|UserMatchHistory|AnalyticsSyncHistory",
+        "category": "marketing",
+        "iab_purposes": [3, 4],
+        "iab_id": 804,
+        "description": "LinkedIn tracking/advertising cookies."
+      },
+      {
+        "pattern": "_clck|_clsk",
+        "category": "analytics",
+        "iab_purposes": [7],
+        "description": "Microsoft Clarity tracking cookies."
+      },
+      {
+        "pattern": "__hstc|hubspotutk|__hssrc|__hssc",
+        "category": "analytics",
+        "iab_purposes": [7, 10],
+        "description": "HubSpot tracking and analytics cookies."
+      },
+      {
+        "pattern": "__cf_bm.*|.*hs.*|.*usemessages.*",
+        "category": "functional",
+        "iab_purposes": [1],
+        "description": "HubSpot and Cloudflare service cookies."
+      },
+      {
+        "pattern": "_zitok",
+        "category": "unknown",
+        "iab_purposes": [],
+        "description": "Unclassified cookie (needs client confirmation)."
+      }
+    ]
+  }
+  

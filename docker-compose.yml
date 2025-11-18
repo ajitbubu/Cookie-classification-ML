@@ -1,0 +1,49 @@
+version: "3"
+
+services:
+  cookie_scheduler:
+    build: .
+    container_name: dynamic_cookie_scanning
+    restart: always  # auto-restart if container crashes
+    ports:
+      - "9010:9010" #expose Flask API to host machine
+    volumes:
+      - ./logs:/app/logs  # map logs folder to host
+      - ./results:/app/results  # map logs folder to host
+    environment:
+      # API endpoint for fetching schedules
+      #- API_URL=http://127.0.0.1:9010/api/schedules
+      - API_URL=http://172.174.5.76:8880/idredact_enterprise_onprem_mw/get_cookie_scheduler_info
+      # API endpoint for Posting scanned results
+      #- RESULT_API_URL=http://127.0.0.1:9010/api/results
+      - RESULT_API_URL=http://172.174.5.76:8880/idredact_enterprise_onprem_mw/save_domain_scan_result
+      # API endpoint for fetching cookie categorization
+      #- FETCH_COOKIE_CATEGORIZATION_API_URL=http://127.0.01:9010/api/fetch-domain-cookie-categorization
+      - FETCH_COOKIE_CATEGORIZATION_API_URL=http://172.174.5.76:8880/idredact_enterprise_onprem_mw/get_domain_cookie_categorization 
+      # Scheduler refresh interval in seconds
+      - REFRESH_INTERVAL=300
+      # API request timeout in seconds
+      - REQUEST_TIMEOUT=10
+      # Maximum concurrent scans
+      - MAX_WORKERS=10
+      # Optional: override log dir inside container
+      - LOG_DIR=/app/logs
+      # Optional: override log dir inside container
+      - LOG_FILE=dynamic_cookie_scanning.log
+      # Optional: override log dir inside container
+      - LOG_TO_CONSOLE=true
+
+      # if you re-add a job with the same ID, it replaces the old one safely.
+      - JOB_REPLACE_EXISTING_INSTANCE=True 
+      # ensures only one instance of the scan job runs at a time. If a job is still running when the next schedule arrives, APScheduler skips starting a new one
+      - JOB_MAX_INSTANCES=1
+      # if the scheduler was paused/off and multiple runs were “missed”, it runs only once when resumed.
+      - JOB_COALESCE=true
+      # If a job is delayed up to 5 minutes then it’s still valid
+      - JOB_MISFIRE_GRACE_TIME=300 #seconds
+      # Max depth of scan
+      - SCAN_MAX_DEPTH_DEFAULT=5 
+      # Max retry per page in scan
+      - SCAN_MAX_RETRY_DEFAULT=3 
+
+

@@ -1,0 +1,254 @@
+{
+  "model_version": "1.0",
+  "model_type": "RandomForestClassifier",
+  "trained_date": "2025-11-18T00:46:55.249403",
+  "categories": [
+    "Advertising",
+    "Analytics",
+    "Functional",
+    "Necessary"
+  ],
+  "feature_count": 29,
+  "feature_names": [
+    "name_length",
+    "has_underscore",
+    "has_numbers",
+    "has_uppercase",
+    "name_entropy",
+    "name_prefix_encoded",
+    "name_suffix_encoded",
+    "vendor_fingerprint",
+    "is_third_party",
+    "domain_levels",
+    "tld_encoded",
+    "is_cdn",
+    "is_known_analytics",
+    "is_known_advertising",
+    "domain_entropy",
+    "is_session",
+    "duration_days",
+    "duration_category_encoded",
+    "httpOnly",
+    "secure",
+    "sameSite_encoded",
+    "security_score",
+    "size",
+    "set_after_accept",
+    "path_is_root",
+    "matches_analytics_pattern",
+    "matches_advertising_pattern",
+    "matches_necessary_pattern",
+    "matches_functional_pattern"
+  ],
+  "hyperparameters": {
+    "bootstrap": true,
+    "ccp_alpha": 0.0,
+    "class_weight": "balanced",
+    "criterion": "gini",
+    "max_depth": 15,
+    "max_features": "sqrt",
+    "max_leaf_nodes": null,
+    "max_samples": null,
+    "min_impurity_decrease": 0.0,
+    "min_samples_leaf": 5,
+    "min_samples_split": 10,
+    "min_weight_fraction_leaf": 0.0,
+    "monotonic_cst": null,
+    "n_estimators": 100,
+    "n_jobs": -1,
+    "oob_score": false,
+    "random_state": 42,
+    "verbose": 0,
+    "warm_start": false
+  },
+  "metrics": {
+    "accuracy": 0.6,
+    "f1_macro": 0.5128205128205128,
+    "f1_weighted": 0.5615384615384615,
+    "classification_report": {
+      "Advertising": {
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1-score": 0.0,
+        "support": 4.0
+      },
+      "Analytics": {
+        "precision": 0.5,
+        "recall": 0.8,
+        "f1-score": 0.6153846153846154,
+        "support": 5.0
+      },
+      "Functional": {
+        "precision": 0.5,
+        "recall": 1.0,
+        "f1-score": 0.6666666666666666,
+        "support": 3.0
+      },
+      "Necessary": {
+        "precision": 1.0,
+        "recall": 0.625,
+        "f1-score": 0.7692307692307693,
+        "support": 8.0
+      },
+      "accuracy": 0.6,
+      "macro avg": {
+        "precision": 0.5,
+        "recall": 0.60625,
+        "f1-score": 0.5128205128205128,
+        "support": 20.0
+      },
+      "weighted avg": {
+        "precision": 0.6,
+        "recall": 0.6,
+        "f1-score": 0.5615384615384615,
+        "support": 20.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        0,
+        3,
+        1,
+        0
+      ],
+      [
+        1,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0
+      ],
+      [
+        0,
+        1,
+        2,
+        5
+      ]
+    ],
+    "feature_importance": [
+      {
+        "feature": "sameSite_encoded",
+        "importance": 0.19228060240266853
+      },
+      {
+        "feature": "security_score",
+        "importance": 0.18122876240596944
+      },
+      {
+        "feature": "domain_entropy",
+        "importance": 0.16791989652793737
+      },
+      {
+        "feature": "httpOnly",
+        "importance": 0.13313335218424785
+      },
+      {
+        "feature": "is_third_party",
+        "importance": 0.1322346282205197
+      },
+      {
+        "feature": "set_after_accept",
+        "importance": 0.06573163430116863
+      },
+      {
+        "feature": "size",
+        "importance": 0.05653012823996445
+      },
+      {
+        "feature": "is_known_analytics",
+        "importance": 0.046477050990838695
+      },
+      {
+        "feature": "is_known_advertising",
+        "importance": 0.022000081181738237
+      },
+      {
+        "feature": "tld_encoded",
+        "importance": 0.0024638635449471063
+      },
+      {
+        "feature": "name_length",
+        "importance": 0.0
+      },
+      {
+        "feature": "matches_necessary_pattern",
+        "importance": 0.0
+      },
+      {
+        "feature": "matches_advertising_pattern",
+        "importance": 0.0
+      },
+      {
+        "feature": "matches_analytics_pattern",
+        "importance": 0.0
+      },
+      {
+        "feature": "path_is_root",
+        "importance": 0.0
+      },
+      {
+        "feature": "secure",
+        "importance": 0.0
+      },
+      {
+        "feature": "is_session",
+        "importance": 0.0
+      },
+      {
+        "feature": "duration_category_encoded",
+        "importance": 0.0
+      },
+      {
+        "feature": "duration_days",
+        "importance": 0.0
+      },
+      {
+        "feature": "has_underscore",
+        "importance": 0.0
+      },
+      {
+        "feature": "is_cdn",
+        "importance": 0.0
+      },
+      {
+        "feature": "domain_levels",
+        "importance": 0.0
+      },
+      {
+        "feature": "vendor_fingerprint",
+        "importance": 0.0
+      },
+      {
+        "feature": "name_suffix_encoded",
+        "importance": 0.0
+      },
+      {
+        "feature": "name_prefix_encoded",
+        "importance": 0.0
+      },
+      {
+        "feature": "name_entropy",
+        "importance": 0.0
+      },
+      {
+        "feature": "has_uppercase",
+        "importance": 0.0
+      },
+      {
+        "feature": "has_numbers",
+        "importance": 0.0
+      },
+      {
+        "feature": "matches_functional_pattern",
+        "importance": 0.0
+      }
+    ],
+    "meets_target": false,
+    "cv_accuracy": 0.7016666666666665
+  }
+}

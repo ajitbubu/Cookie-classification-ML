@@ -1,0 +1,134 @@
+# Example YAML configuration file for Cookie Scanner Platform
+# Copy this file to config.yaml and customize as needed
+
+# Scan profiles
+scan_profiles:
+  default_quick:
+    scan_mode: quick
+    max_retries: 3
+    wait_for_dynamic_content: 5
+    accept_button_selector: 'button[data-role="accept"]'
+  
+  default_deep:
+    scan_mode: deep
+    max_depth: 5
+    max_pages: 50
+    max_retries: 3
+    wait_for_dynamic_content: 10
+    accept_button_selector: 'button[data-role="accept"]'
+  
+  comprehensive:
+    scan_mode: deep
+    max_depth: 10
+    max_pages: 100
+    max_retries: 5
+    wait_for_dynamic_content: 15
+    follow_external_links: false
+    collect_screenshots: true
+
+# Notification templates
+notification_templates:
+  scan_completed:
+    email:
+      subject: "Scan completed for {domain}"
+      body: |
+        Your scan has completed successfully.
+        
+        Domain: {domain}
+        Total Cookies: {total_cookies}
+        Pages Visited: {page_count}
+        Duration: {duration_seconds}s
+        
+        View results: {results_url}
+    
+    slack:
+      text: "✅ Scan completed for {domain}"
+      blocks:
+        - type: section
+          text:
+            type: mrkdwn
+            text: "*Scan Completed*\n\nDomain: {domain}\nCookies: {total_cookies}\nPages: {page_count}"
+  
+  scan_failed:
+    email:
+      subject: "Scan failed for {domain}"
+      body: |
+        Your scan has failed.
+        
+        Domain: {domain}
+        Error: {error}
+        
+        Please check the logs for more details.
+    
+    slack:
+      text: "❌ Scan failed for {domain}: {error}"
+  
+  compliance_violation:
+    email:
+      subject: "Compliance violation detected for {domain}"
+      body: |
+        A compliance violation has been detected.
+        
+        Domain: {domain}
+        Violation Type: {violation_type}
+        Details: {details}
+        
+        Please review and take action.
+    
+    slack:
+      text: "⚠️ Compliance violation detected for {domain}"
+      blocks:
+        - type: section
+          text:
+            type: mrkdwn
+            text: "*Compliance Violation*\n\nDomain: {domain}\nType: {violation_type}\nDetails: {details}"
+  
+  anomaly_detected:
+    email:
+      subject: "Anomaly detected for {domain}"
+      body: |
+        An anomaly has been detected in your scan results.
+        
+        Domain: {domain}
+        Metric: {metric}
+        Current Value: {current_value}
+        Expected Value: {expected_value}
+        Deviation: {deviation_percentage}%
+        
+        View details: {details_url}
+    
+    slack:
+      text: "🔍 Anomaly detected for {domain}: {metric} deviated by {deviation_percentage}%"
+
+# Rate limits (requests per minute)
+rate_limits:
+  default: 100
+  premium: 1000
+  admin: 10000
+
+# IAB purpose to category mapping
+iab_purpose_category_map:
+  1: "Necessary"      # Storage and access of information
+  2: "Necessary"      # Basic ads
+  3: "Functional"     # Personalization
+  4: "Advertising"    # Ad selection, delivery, reporting
+  5: "Advertising"    # Content selection, delivery, reporting
+  6: "Analytics"      # Measurement
+  7: "Analytics"      # Market research
+  8: "Functional"     # Product development
+  9: "Functional"     # Security, fraud prevention
+  10: "Analytics"     # Match data with offline sources
+
+# Category priority (for conflict resolution)
+category_priority:
+  - "Necessary"
+  - "Functional"
+  - "Analytics"
+  - "Advertising"
+
+# Data retention policies (days)
+data_retention:
+  scan_results: 90
+  reports: 365
+  notifications: 30
+  audit_logs: 365
