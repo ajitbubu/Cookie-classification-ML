@@ -5,7 +5,7 @@ Simple test to verify analytics module functionality.
 from datetime import datetime
 from uuid import uuid4
 
-from models.scan import ScanResult, Cookie, ScanParams, ScanMode, ScanStatus, CookieType
+from src.models.scan import ScanResult, Cookie, ScanParams, ScanMode, ScanStatus, CookieType
 from analytics import (
     MetricsCalculator,
     ReportGenerator,
@@ -13,7 +13,7 @@ from analytics import (
     AnomalyDetector,
     ComparisonGenerator
 )
-from models.report import ReportFormat
+from src.models.report import ReportFormat
 
 
 def create_test_scan(domain: str, cookie_count: int = 10) -> ScanResult:

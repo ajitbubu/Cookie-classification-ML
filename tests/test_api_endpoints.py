@@ -12,7 +12,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 def test_analytics_endpoints_exist():
     """Test that analytics endpoints are properly defined."""
     try:
-        from api.routers import analytics
+        from src.api.routers import analytics
         
         # Check router exists
         assert analytics.router is not None
@@ -36,7 +36,7 @@ def test_analytics_endpoints_exist():
 def test_health_endpoints_exist():
     """Test that health endpoints are properly defined."""
     try:
-        from api.routers import health
+        from src.api.routers import health
         
         # Check router exists
         assert health.router is not None
@@ -60,7 +60,7 @@ def test_health_endpoints_exist():
 def test_notification_endpoints_exist():
     """Test that notification endpoints are properly defined."""
     try:
-        from api.routers import notifications
+        from src.api.routers import notifications
         
         # Check router exists
         assert notifications.router is not None
@@ -84,7 +84,7 @@ def test_notification_endpoints_exist():
 def test_profile_endpoints_exist():
     """Test that profile endpoints are properly defined."""
     try:
-        from api.routers import profiles
+        from src.api.routers import profiles
         
         # Check router exists
         assert profiles.router is not None
@@ -106,8 +106,8 @@ def test_profile_endpoints_exist():
 def test_services_exist():
     """Test that required services are properly defined."""
     try:
-        from services.analytics_service import AnalyticsService
-        from services.health_checker import HealthChecker
+        from src.services.analytics_service import AnalyticsService
+        from src.services.health_checker import HealthChecker
         
         # Check services can be imported
         assert AnalyticsService is not None
@@ -123,7 +123,7 @@ def test_services_exist():
 def test_analytics_service_methods():
     """Test that AnalyticsService has required methods."""
     try:
-        from services.analytics_service import AnalyticsService
+        from src.services.analytics_service import AnalyticsService
         
         # Check methods exist
         assert hasattr(AnalyticsService, 'get_scan_result')
@@ -142,7 +142,7 @@ def test_analytics_service_methods():
 def test_health_checker_methods():
     """Test that HealthChecker has required methods."""
     try:
-        from services.health_checker import HealthChecker
+        from src.services.health_checker import HealthChecker
         
         # Check methods exist
         assert hasattr(HealthChecker, 'check_health')

@@ -18,7 +18,7 @@ import asyncpg
 from httpx import AsyncClient, ASGITransport
 
 # Import the FastAPI app
-from api.main import create_app
+from src.api.main import create_app
 
 
 @pytest.fixture
@@ -87,7 +87,7 @@ async def test_user(db_pool: asyncpg.Pool) -> dict:
 @pytest.fixture
 async def auth_token(test_user: dict) -> str:
     """Generate authentication token for test user."""
-    from api.auth.jwt import create_access_token
+    from src.api.auth.jwt import create_access_token
     
     token_data = {
         "sub": str(test_user["user_id"]),

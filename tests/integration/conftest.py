@@ -84,7 +84,7 @@ async def clean_database(db_pool: asyncpg.Pool):
 @pytest.fixture
 async def test_user(db_pool: asyncpg.Pool) -> dict:
     """Create a test user with admin role."""
-    from api.auth.password import hash_password
+    from src.api.auth.password import hash_password
     
     user_id = uuid4()
     email = "test@example.com"
@@ -111,7 +111,7 @@ async def test_user(db_pool: asyncpg.Pool) -> dict:
 @pytest.fixture
 async def test_user_viewer(db_pool: asyncpg.Pool) -> dict:
     """Create a test user with viewer role."""
-    from api.auth.password import hash_password
+    from src.api.auth.password import hash_password
     
     user_id = uuid4()
     email = "viewer@example.com"
@@ -138,7 +138,7 @@ async def test_user_viewer(db_pool: asyncpg.Pool) -> dict:
 @pytest.fixture
 async def auth_token(test_user: dict) -> str:
     """Generate JWT authentication token for test user."""
-    from api.auth.jwt import create_access_token
+    from src.api.auth.jwt import create_access_token
     
     token_data = {
         "sub": str(test_user["user_id"]),
@@ -158,7 +158,7 @@ async def auth_token(test_user: dict) -> str:
 @pytest.fixture
 async def auth_token_viewer(test_user_viewer: dict) -> str:
     """Generate JWT authentication token for viewer user."""
-    from api.auth.jwt import create_access_token
+    from src.api.auth.jwt import create_access_token
     
     token_data = {
         "sub": str(test_user_viewer["user_id"]),
@@ -176,7 +176,7 @@ async def auth_token_viewer(test_user_viewer: dict) -> str:
 @pytest.fixture
 async def client(clean_database) -> AsyncGenerator[AsyncClient, None]:
     """Create HTTP client for API requests."""
-    from api.main import create_app
+    from src.api.main import create_app
     
     app = create_app()
     

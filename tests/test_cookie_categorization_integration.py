@@ -4,7 +4,7 @@ Test script to verify cookie categorization integration.
 
 import asyncio
 import logging
-from services.cookie_categorization import (
+from src.services.cookie_categorization import (
     categorize_cookie,
     initialize_categorization,
     hash_cookie_value,

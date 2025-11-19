@@ -11,7 +11,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 import pytest
-from ml_classifier.feature_extractor import FeatureExtractor
+from src.ml_classifier.feature_extractor import FeatureExtractor
 
 
 @pytest.fixture

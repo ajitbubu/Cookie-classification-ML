@@ -24,7 +24,7 @@ def test_celery_connection():
     logger.info("Testing Celery connection...")
     
     try:
-        from services.celery_app import celery_app
+        from src.services.celery_app import celery_app
         
         # Check if workers are available
         inspect = celery_app.control.inspect()
@@ -50,7 +50,7 @@ def test_report_generation_task():
     logger.info("\nTesting report generation task...")
     
     try:
-        from services.report_tasks import generate_report_async
+        from src.services.report_tasks import generate_report_async
         
         # Note: This requires a valid scan_id in the database
         # For testing, we'll just verify the task can be imported and called
@@ -59,7 +59,7 @@ def test_report_generation_task():
         logger.info("  Task registered: Yes")
         
         # Check task registration
-        from services.celery_app import celery_app
+        from src.services.celery_app import celery_app
         registered_tasks = celery_app.tasks
         
         if 'generate_report_async' in registered_tasks:
@@ -79,14 +79,14 @@ def test_notification_task():
     logger.info("\nTesting notification task...")
     
     try:
-        from services.notification_tasks import send_notification_async
+        from src.services.notification_tasks import send_notification_async
         
         logger.info("✓ Notification task imported successfully")
         logger.info("  Task name: send_notification_async")
         logger.info("  Task registered: Yes")
         
         # Check task registration
-        from services.celery_app import celery_app
+        from src.services.celery_app import celery_app
         registered_tasks = celery_app.tasks
         
         if 'send_notification_async' in registered_tasks:
@@ -106,7 +106,7 @@ def test_monitoring():
     logger.info("\nTesting Celery monitoring...")
     
     try:
-        from services.celery_monitoring import get_celery_monitor
+        from src.services.celery_monitoring import get_celery_monitor
         
         monitor = get_celery_monitor()
         
@@ -135,7 +135,7 @@ def test_task_routing():
     logger.info("\nTesting task routing...")
     
     try:
-        from services.celery_app import celery_app
+        from src.services.celery_app import celery_app
         
         task_routes = celery_app.conf.task_routes
         
@@ -156,7 +156,7 @@ def test_beat_schedule():
     logger.info("\nTesting Celery Beat schedule...")
     
     try:
-        from services.celery_beat_config import celery_app
+        from src.services.celery_beat_config import celery_app
         
         beat_schedule = celery_app.conf.beat_schedule
         
@@ -181,7 +181,7 @@ def main():
     
     # Initialize config (optional for basic tests)
     try:
-        from core.config import init_config
+        from src.core.config import init_config
         init_config()
         logger.info("✓ Configuration initialized\n")
     except Exception as e:

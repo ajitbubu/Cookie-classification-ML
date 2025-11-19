@@ -4,8 +4,8 @@ Test distributed locking functionality.
 
 import time
 import logging
-from cache.redis_client import init_redis_client
-from services.distributed_lock import init_distributed_lock
+from src.cache.redis_client import init_redis_client
+from src.services.distributed_lock import init_distributed_lock
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
