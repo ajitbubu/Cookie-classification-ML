@@ -75,11 +75,14 @@ output/
 *.csv
 *.xlsx
 
-# ML/Training Data (uncomment if needed)
-# training_data/
-# models/*.pkl
-# models/*.h5
-# models/*.pth
+# ML/Training Data - Exclude binary model files
+training_data/
+models/*.pkl
+models/*.pkl.gz
+models/*.h5
+models/*.pth
+models/*.onnx
+models/*.joblib
 
 # Docker
 *.pid
@@ -109,3 +112,38 @@ celerybeat.pid
 *.tmp
 temp/
 tmp/
+
+# Debug and diagnostic scripts
+debug_*.py
+diagnose_*.py
+test_debug*.py
+
+# Migration backups
+*.sql.skip
+*.sql.bak
+
+# Secrets and credentials
+*credentials*.json
+*secrets*.json
+*.key
+*.pem
+*.crt
+
+# Node modules (if using JS dependencies)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Local config overrides
+config.local.py
+settings.local.py
+*local_config*
+
+# Generated documentation
+docs/_build/
+site/
+
+# IDE specific
+*.code-workspace
+.vscode/settings.json
+.vscode/launch.json
