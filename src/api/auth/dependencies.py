@@ -2,6 +2,7 @@
 FastAPI authentication dependencies.
 """
 
+import os
 from typing import Optional
 from fastapi import Depends, HTTPException, status, Security
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, APIKeyHeader
@@ -14,6 +15,9 @@ from src.models.user import TokenData, UserRole
 # Security schemes
 bearer_scheme = HTTPBearer(auto_error=False)
 api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+
+# Check if development mode is enabled
+DEV_MODE = os.getenv('ENVIRONMENT', '').lower() == 'development'
 
 
 async def get_current_user_from_token(
@@ -84,26 +88,36 @@ async def get_current_user(
 ) -> TokenData:
     """
     Get current authenticated user from either JWT token or API key.
-    
+    In development mode, returns a default admin user if no authentication is provided.
+
     Args:
         token_user: User from JWT token
         api_key_user: User from API key
-        
+
     Returns:
         TokenData for authenticated user
-        
+
     Raises:
-        HTTPException: If not authenticated
+        HTTPException: If not authenticated (in production)
     """
     user = token_user or api_key_user
-    
+
     if user is None:
+        # In development mode, return a default admin user
+        if DEV_MODE:
+            return TokenData(
+                user_id="3b4629d4-a4f5-4eed-a46b-1c146437d1b3",
+                email="dev@example.com",
+                role=UserRole.ADMIN,
+                scopes=["scans:read", "scans:write", "schedules:read", "schedules:write", "analytics:read", "admin"]
+            )
+
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not authenticated",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     return user
 
 

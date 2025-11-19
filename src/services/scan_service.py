@@ -3,6 +3,7 @@ Scan service with real-time progress streaming.
 """
 
 import asyncio
+import json
 import logging
 import time
 from typing import Dict, Any, Optional, Callable, List
@@ -88,7 +89,7 @@ class ScanService:
                 scan_mode,
                 now,
                 ScanStatus.PENDING,
-                params.dict(),
+                json.dumps(params.dict()),
                 now,
                 now
             )
