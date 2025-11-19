@@ -24,8 +24,8 @@ from pydantic import BaseModel, Field, validator
 
 from src.api.auth.dependencies import get_current_user, require_scope
 from src.models.user import TokenData
-from parallel_scanner import ParallelCookieScanner, ScanProgress
-from enterprise_scanner import EnterpriseCookieScanner, EnterpriseMetrics, enterprise_deep_scan
+from src.scanners.parallel_scanner import ParallelCookieScanner, ScanProgress
+from src.scanners.enterprise_scanner import EnterpriseCookieScanner, EnterpriseMetrics, enterprise_deep_scan
 
 logger = logging.getLogger(__name__)
 
