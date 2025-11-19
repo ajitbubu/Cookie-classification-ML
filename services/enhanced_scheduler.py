@@ -29,13 +29,16 @@ from config import (
     JOB_MISFIRE_GRACE_TIME,
     DEFAULT_BUTTON_SELECTOR
 )
-from cookie_scanner import scan_domain
 from cache.redis_client import init_redis_client, get_redis_client
 from database.connection import init_db_connection, get_db_connection
 from services.distributed_lock import init_distributed_lock, get_distributed_lock
 from services.schedule_repository import init_schedule_repository, get_schedule_repository
 from services.schedule_watcher import init_schedule_watcher, get_schedule_watcher
 from services.job_history import init_job_history, get_job_history
+from services.scheduled_scan_executor import (
+    init_scheduled_scan_executor,
+    get_scheduled_scan_executor
+)
 
 logger = logging.getLogger(__name__)
 
@@ -121,6 +124,15 @@ class EnhancedScheduler:
         init_schedule_watcher(self.schedule_repo, self.schedule_check_interval)
         self.schedule_watcher = get_schedule_watcher()
         logger.info("Schedule watcher initialized")
+
+        # Initialize scheduled scan executor
+        init_scheduled_scan_executor(
+            max_concurrent_quick=5,
+            browser_pool_size=5,
+            pages_per_browser=20
+        )
+        self.scan_executor = get_scheduled_scan_executor()
+        logger.info("Scheduled scan executor initialized")
     
     def _job_listener(self, event: Any) -> None:
         """
@@ -196,23 +208,12 @@ class EnhancedScheduler:
                 # Track active execution
                 if execution_id:
                     self.active_executions[domain] = execution_id
-                
-                # Build scan parameters
-                scan_params = {
-                    "domain_config_id": domain_config_id,
-                    "domain": domain,
-                    "domainUrl": domain,
-                    "description": schedule.get('description', ''),
-                    "maxPages": schedule.get('max_pages'),
-                    "scanDepth": schedule.get('scan_depth'),
-                    "maxRetries": schedule.get('max_retries', 3),
-                    "customPages": schedule.get('custom_pages', []),
-                    "accept_selector": schedule.get('accept_selector', DEFAULT_BUTTON_SELECTOR),
-                }
-                
-                # Execute scan
-                logger.info(f"Starting scheduled scan for {domain}")
-                result = scan_domain(scan_params)
+
+                # Execute scan using ScheduledScanExecutor
+                logger.info(
+                    f"Starting scheduled {schedule.get('scan_type', 'quick')} scan for {domain}"
+                )
+                result = self.scan_executor.execute_scheduled_scan_sync(schedule)
                 
                 # Update schedule run status
                 self.schedule_repo.update_schedule_run_status(

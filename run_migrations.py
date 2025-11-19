@@ -5,6 +5,11 @@ Run database migrations for the enhanced scheduler.
 
 import sys
 import logging
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 from database.migrate import run_migrations
 
 logging.basicConfig(

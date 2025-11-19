@@ -24,7 +24,7 @@ from api.middleware.logging import LoggingMiddleware
 from api.middleware.metrics import MetricsMiddleware
 from api.middleware.request_context import RequestContextMiddleware
 from api.errors.handlers import register_exception_handlers
-from api.routers import scans, schedules, analytics, profiles, notifications, health, auth, ml_admin
+from api.routers import scans, schedules, analytics, profiles, notifications, health, auth, ml_admin, parallel_scan
 
 # Get config
 config = get_config()
@@ -89,6 +89,11 @@ async def lifespan(app: FastAPI):
             command_timeout=60
         )
         app.state.db_pool = _db_pool
+        
+        # Initialize global database connection for database module
+        from database.connection import init_db_connection
+        init_db_connection(config.database.url)
+        
         logger.info("Database pool initialized successfully")
     except Exception as e:
         logger.error(f"Failed to initialize database pool: {e}")
@@ -107,6 +112,15 @@ async def lifespan(app: FastAPI):
             # Test connection
             _redis_client.ping()
             app.state.redis_client = _redis_client
+            
+            # Initialize global Redis client for cache module
+            from cache.redis_client import init_redis_client
+            init_redis_client(
+                host=config.redis.url.split('//')[1].split(':')[0],
+                port=int(config.redis.url.split(':')[-1].split('/')[0]),
+                db=0
+            )
+            
             logger.info("Redis client initialized successfully")
         else:
             logger.info("Redis not configured, caching disabled")
@@ -268,6 +282,7 @@ All errors follow a standardized format:
     # Include routers
     app.include_router(auth.router, prefix="/api/v1/auth", tags=["Authentication"])
     app.include_router(scans.router, prefix="/api/v1/scans", tags=["Scans"])
+    app.include_router(parallel_scan.router, tags=["Parallel Scanning"])
     app.include_router(schedules.router, prefix="/api/v1/schedules", tags=["Schedules"])
     app.include_router(analytics.router, prefix="/api/v1/analytics", tags=["Analytics"])
     app.include_router(profiles.router, prefix="/api/v1/profiles", tags=["Profiles"])

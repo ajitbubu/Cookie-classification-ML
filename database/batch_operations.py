@@ -36,13 +36,13 @@ class BatchOperations:
         batch_size: int = 1000
     ) -> int:
         """
-        Batch insert cookies for a scan.
+        Batch insert cookies for a scan with categorization metadata.
         
         Uses executemany() for efficient bulk inserts. Processes cookies
         in batches to avoid memory issues with very large datasets.
         
         Args:
-            cookies: List of cookie dicts
+            cookies: List of cookie dicts with categorization
             scan_id: Scan ID to associate cookies with
             batch_size: Number of cookies to insert per batch
             
@@ -66,6 +66,16 @@ class BatchOperations:
         """
         
         total_inserted = 0
+        categorization_stats = {
+            "DB": 0,
+            "ML_High": 0,
+            "ML_Low": 0,
+            "IAB": 0,
+            "IAB_ML_Blend": 0,
+            "RulesJSON": 0,
+            "Rules_ML_Agree": 0,
+            "Fallback": 0
+        }
         
         # Process in batches
         for i in range(0, len(cookies), batch_size):
@@ -74,6 +84,22 @@ class BatchOperations:
             
             for cookie in batch:
                 import json
+                
+                # Build metadata with ML classification info
+                metadata = cookie.get('metadata', {})
+                if cookie.get('ml_confidence') is not None:
+                    metadata['ml_confidence'] = cookie.get('ml_confidence')
+                if cookie.get('ml_probabilities') is not None:
+                    metadata['ml_probabilities'] = cookie.get('ml_probabilities')
+                if cookie.get('classification_evidence') is not None:
+                    metadata['classification_evidence'] = cookie.get('classification_evidence')
+                if cookie.get('requires_review') is not None:
+                    metadata['requires_review'] = cookie.get('requires_review')
+                
+                # Track categorization source stats
+                source = cookie.get('source', 'Fallback')
+                categorization_stats[source] = categorization_stats.get(source, 0) + 1
+                
                 params = (
                     str(uuid.uuid4()),  # cookie_id
                     scan_id,
@@ -93,7 +119,7 @@ class BatchOperations:
                     json.dumps(cookie.get('iab_purposes', [])),
                     cookie.get('description'),
                     cookie.get('source'),
-                    json.dumps(cookie.get('metadata', {}))
+                    json.dumps(metadata)
                 )
                 params_list.append(params)
             
@@ -106,6 +132,7 @@ class BatchOperations:
                 raise
         
         logger.info(f"Batch inserted {total_inserted} cookies for scan {scan_id}")
+        logger.info(f"Categorization sources: {categorization_stats}")
         return total_inserted
     
     def batch_insert_scan_results(

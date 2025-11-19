@@ -14,7 +14,7 @@ import base64
 from typing import Optional
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.primitives import hashes
-from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2
+from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 from core.config import get_config
 
@@ -54,7 +54,7 @@ class EncryptionManager:
             Fernet instance
         """
         # Use PBKDF2 to derive a 32-byte key suitable for Fernet
-        kdf = PBKDF2(
+        kdf = PBKDF2HMAC(
             algorithm=hashes.SHA256(),
             length=32,
             salt=b'cookie_scanner_salt',  # Static salt for deterministic key derivation

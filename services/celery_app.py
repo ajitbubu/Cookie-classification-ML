@@ -17,13 +17,15 @@ def create_celery_app() -> Celery:
     Returns:
         Configured Celery instance
     """
+    import os
+    
     try:
         config = get_config()
         redis_url = config.redis.url
     except RuntimeError:
-        # Fallback if config not initialized
-        redis_url = 'redis://localhost:6379/0'
-        logger.warning("Config not initialized, using default Redis URL")
+        # Fallback to environment variable or default
+        redis_url = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
+        logger.warning(f"Config not initialized, using Redis URL from env: {redis_url}")
     
     # Create Celery app
     app = Celery(
@@ -50,6 +52,8 @@ def create_celery_app() -> Celery:
         broker_connection_retry_on_startup=True,
         # Task routing
         task_routes={
+            'execute_scan_async': {'queue': 'scans'},
+            'cancel_scan_async': {'queue': 'scans'},
             'generate_report_async': {'queue': 'reports'},
             'generate_multiple_reports_async': {'queue': 'reports'},
             'export_scan_to_csv_async': {'queue': 'reports'},
@@ -67,7 +71,19 @@ def create_celery_app() -> Celery:
     return app
 
 
-# Global Celery app instance
+# Global Celery app instance - will be created lazily
+_celery_app = None
+
+
+def get_celery_app() -> Celery:
+    """Get or create the Celery app instance."""
+    global _celery_app
+    if _celery_app is None:
+        _celery_app = create_celery_app()
+    return _celery_app
+
+
+# For backward compatibility
 celery_app = create_celery_app()
 
 
@@ -98,6 +114,7 @@ def autodiscover_tasks():
         from services import notification_tasks
         from services import report_tasks
         from services import celery_monitoring
+        from services import scan_tasks
         
         logger.info("Celery tasks auto-discovered and registered")
     except Exception as e:

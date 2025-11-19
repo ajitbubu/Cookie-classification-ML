@@ -94,7 +94,14 @@ class AuditLogger:
     
     def __init__(self):
         """Initialize audit logger."""
-        self.db = get_db_connection()
+        self._db = None
+    
+    @property
+    def db(self):
+        """Lazy load database connection."""
+        if self._db is None:
+            self._db = get_db_connection()
+        return self._db
     
     def log_event(
         self,

@@ -43,6 +43,8 @@ from config import (
     REQUEST_TIMEOUT
 )
 
+logger = logging.getLogger(__name__)
+
 # Import ML Cookie Classifier
 try:
     from ml_classifier import MLCookieClassifier
@@ -53,8 +55,6 @@ except Exception as e:
     ML_CLASSIFIER = None
     ML_ENABLED = False
     logger.warning(f"ML Cookie Classifier not available: {e}. Using rules-only classification.")
-
-logger = logging.getLogger(__name__)
 
 
 # -----------------------------------------------------------------------------

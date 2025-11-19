@@ -17,12 +17,23 @@ class ScheduleFrequency(str, Enum):
     CUSTOM = "custom"
 
 
+class ScanType(str, Enum):
+    """Scan type enumeration for scheduled scans."""
+    QUICK = "quick"
+    DEEP = "deep"
+
+
 class Schedule(BaseModel):
     """Schedule data model."""
     schedule_id: Optional[UUID4] = None
     domain_config_id: UUID4 = Field(..., description="Domain configuration ID")
     domain: str = Field(..., description="Domain to scan")
     profile_id: Optional[UUID4] = Field(None, description="Scan profile ID")
+    scan_type: ScanType = Field(default=ScanType.QUICK, description="Scan type (quick or deep)")
+    scan_params: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Scan parameters (max_pages, custom_pages, etc.)"
+    )
     frequency: ScheduleFrequency = Field(..., description="Schedule frequency")
     time_config: Dict[str, Any] = Field(
         ...,

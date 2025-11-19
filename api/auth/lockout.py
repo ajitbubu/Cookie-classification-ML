@@ -37,8 +37,8 @@ class AccountLockoutManager:
             lockout_duration_minutes: Duration of lockout in minutes
             attempt_window_minutes: Time window for counting attempts
         """
-        self.redis = get_redis_client()
-        self.audit_logger = get_audit_logger()
+        self._redis = None
+        self._audit_logger = None
         self.max_attempts = max_attempts
         self.lockout_duration_minutes = lockout_duration_minutes
         self.attempt_window_minutes = attempt_window_minutes
@@ -49,6 +49,20 @@ class AccountLockoutManager:
             f"lockout_duration={lockout_duration_minutes}min, "
             f"window={attempt_window_minutes}min"
         )
+    
+    @property
+    def redis(self):
+        """Lazy load Redis client."""
+        if self._redis is None:
+            self._redis = get_redis_client()
+        return self._redis
+    
+    @property
+    def audit_logger(self):
+        """Lazy load audit logger."""
+        if self._audit_logger is None:
+            self._audit_logger = get_audit_logger()
+        return self._audit_logger
     
     def _get_attempt_key(self, email: str) -> str:
         """Get Redis key for tracking login attempts."""

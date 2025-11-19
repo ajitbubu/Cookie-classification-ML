@@ -58,11 +58,11 @@ async def get_preferences(
         User's notification preferences
     """
     repository = get_preferences_repository()
-    preferences = repository.get_preferences(current_user.user_id)
+    preferences = await repository.get_preferences(current_user.user_id)
     
     if not preferences:
         # Create default preferences if none exist
-        preferences = repository.create_default_preferences(current_user.user_id)
+        preferences = await repository.create_default_preferences(current_user.user_id)
     
     return PreferencesResponse(
         user_id=preferences.user_id,
@@ -113,7 +113,7 @@ async def update_preferences(
         updates['quiet_hours'] = request.quiet_hours
     
     # Update preferences
-    preferences = repository.update_preferences(current_user.user_id, updates)
+    preferences = await repository.update_preferences(current_user.user_id, updates)
     
     if not preferences:
         raise HTTPException(
@@ -147,7 +147,7 @@ async def delete_preferences(
     This will reset preferences to defaults on next access.
     """
     repository = get_preferences_repository()
-    success = repository.delete_preferences(current_user.user_id)
+    success = await repository.delete_preferences(current_user.user_id)
     
     if not success:
         raise HTTPException(
